@@ -11,3 +11,7 @@ eureka:
     fetch-registry: false
   server:
     wait-time-in-ms-when-sync-empty: 0
+
+logging:
+  level:
+    org.springframework: DEBUG

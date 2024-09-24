@@ -2,10 +2,10 @@ package io.ethan.chatting.configserver
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.PropertySource
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @SpringBootApplication
-@PropertySource("classpath:config-server-application.yml")
+@EnableDiscoveryClient
 class ConfigServerApplication
 
 fun main(args: Array<String>) {
