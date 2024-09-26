@@ -2,6 +2,12 @@ server:
   port: 8081
 
 spring:
+  application:
+    admin:
+      name: admin-service
+  profiles:
+    active: local
   cloud:
     config:
       import: optional:configserver:http://localhost:8888
+      uri: http://localhost:8888
