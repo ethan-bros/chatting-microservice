@@ -18,10 +18,14 @@ java {
 }
 
 dependencies {
+	// Spring Boot
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+	// Spring Cloud
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
 	implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

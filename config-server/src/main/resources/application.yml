@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8887
 
 spring:
   application:
@@ -10,7 +10,7 @@ spring:
         git:
           uri: https://github.com/ethan-bros/chatting-microservice-config-server.git #설정 파일 저장할 git 저장소
           default-label: main
-          search-paths: '{application}'
+          search-paths: '.' #'{application}'
   config:
     import: optional:configwerver:http://localhost:8888
 
