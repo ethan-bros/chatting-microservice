@@ -1,5 +1,5 @@
 server:
-  port: 8887
+  port: 8888
 
 spring:
   application:
@@ -9,10 +9,8 @@ spring:
       server:
         git:
           uri: https://github.com/ethan-bros/chatting-microservice-config-server.git #설정 파일 저장할 git 저장소
-          default-label: main
+          default-label: local/ms.keum
           search-paths: '.' #'{application}'
-  config:
-    import: optional:configwerver:http://localhost:8888
 
 eureka:
   client:

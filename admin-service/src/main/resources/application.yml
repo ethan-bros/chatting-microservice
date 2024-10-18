@@ -3,8 +3,7 @@ server:
 
 spring:
   application:
-    admin:
-      name: admin-service
+    name: admin-service
   profiles:
     active: local
   cloud:
