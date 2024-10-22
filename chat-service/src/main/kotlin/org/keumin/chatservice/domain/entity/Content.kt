@@ -11,12 +11,10 @@ import lombok.Setter
 class Content(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String,
+    val id: String? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conversation_id")
-    var conversation: Conversation,
-
-    ) : BaseTimeEntity() {
+    val conversation: Conversation,
     @OneToMany(mappedBy = "content", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var lines: MutableList<Line> = mutableListOf()
-}
+    val lines: MutableList<Line> = mutableListOf()
+) : BaseTimeEntity()

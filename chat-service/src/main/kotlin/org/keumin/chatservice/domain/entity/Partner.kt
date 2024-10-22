@@ -11,8 +11,17 @@ import lombok.Setter
 class Partner(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String,
+    var id: String? = null,
     var age: Int,
     var role: String,
     var characteristic: String
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+    companion object {
+        fun create(age: Int, role: String, characteristic: String) =
+            Partner(
+                age = age,
+                role = role,
+                characteristic = characteristic
+            )
+    }
+}

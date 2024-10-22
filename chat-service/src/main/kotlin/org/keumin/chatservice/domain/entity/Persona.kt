@@ -11,8 +11,18 @@ import lombok.Setter
 class Persona(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String,
-    var age: Int,
-    var role: String,
-    var characteristic: String
-) : BaseTimeEntity()
+    val id: String? = null,
+    val age: Int,
+    val role: String,
+    val characteristic: String
+) : BaseTimeEntity() {
+
+    companion object {
+        fun create(age: Int, role: String, characteristic: String) =
+            Persona(
+                age = age,
+                role = role,
+                characteristic = characteristic
+            )
+    }
+}

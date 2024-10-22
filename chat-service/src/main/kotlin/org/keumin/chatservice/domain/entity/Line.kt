@@ -11,14 +11,14 @@ import lombok.Setter
 class Line(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String,
+    val id: String? = null,
 
     @Column(name = "line_order")
-    var order: Int,
-    var speaker: String,
-    var line: String,
+    val order: Int,
+    val speaker: String,
+    val line: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "content_id")
-    var content: Content
+    var content: Content? = null
 ) : BaseTimeEntity() {
 }

@@ -10,26 +10,36 @@ import lombok.Setter
 @Setter
 class Conversation(
     @Id @GeneratedValue(strategy = GenerationType.UUID)
-    var id: String,
+    val id: String? = null,
 
-    var user_id: String,
+    val user_id: String,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "persona_id")
-    var persona: Persona,
+    var persona: Persona? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "partner_id")
-    var partner: Partner,
+    var partner: Partner? = null,
 
-    var purpose: String,
+    val purpose: String,
 
-    var relation: String,
+    val relation: String,
 
-    var atmosphere: String,
+    val atmosphere: String,
 
     ) : BaseTimeEntity() {
 
     @OneToMany(mappedBy = "conversation", cascade = [CascadeType.ALL], orphanRemoval = true)
     var contents: MutableList<Content> = mutableListOf()
+
+    companion object {
+        fun create(user_id: String, purpose: String, relation: String, atmosphere: String) =
+            Conversation(
+                user_id = user_id,
+                purpose = purpose,
+                relation = relation,
+                atmosphere = atmosphere
+            )
+    }
 }
