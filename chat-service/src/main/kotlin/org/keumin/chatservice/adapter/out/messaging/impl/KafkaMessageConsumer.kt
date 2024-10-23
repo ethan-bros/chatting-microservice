@@ -2,9 +2,9 @@ package org.keumin.chatservice.adapter.out.messaging.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.keumin.chatservice.adapter.out.messaging.message.ContentSaveMessage
-import org.keumin.chatservice.adapter.out.persistence.JpaContentRepository
-import org.keumin.chatservice.adapter.out.persistence.JpaConversationRepository
 import org.keumin.chatservice.domain.entity.Content
+import org.keumin.chatservice.domain.service.ContentService
+import org.keumin.chatservice.domain.service.ConversationService
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class KafkaMessageConsumer(
     private val objectMapper: ObjectMapper,
-    private val contentRepository: JpaContentRepository,
-    private val conversationRepository: JpaConversationRepository
+    private val contentService: ContentService,
+    private val conversationService: ConversationService
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -24,7 +24,7 @@ class KafkaMessageConsumer(
             logger.info("Received message: $message")
             processMessage(
                 message.toEntity(
-                    conversationRepository.findById(message.conversationId).get()
+                    conversationService.getConversation(message.conversationId)
                 )
             )
         } catch (e: Exception) {
@@ -33,6 +33,6 @@ class KafkaMessageConsumer(
     }
 
     fun processMessage(content: Content) {
-        contentRepository.save(content)
+        contentService.createContent(content)
     }
 }
