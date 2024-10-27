@@ -6,7 +6,91 @@ spring:
     name: api-gateway
   profiles:
     active: local
+  security:
+    jwt:
+      secret: your-256-bit-secret
+      expiration: 86400000  # 24시간
+      allowed-paths:
+        - /auth/**
+        - /public/**
   cloud:
+    gateway:
+      routes:
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: adminServiceCircuitBreaker
+                fallbackUri: forward:/fallback/admin
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+        - id: config-server
+          uri: lb://config-server
+          predicates:
+            - Path=/config/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: configServiceCircuitBreaker
+                fallbackUri: forward:/fallback/config
+      default-filters:
+        - name: ResponseTimeout
+          args:
+            timeout: 5000
+        - AddResponseHeader=X-Response-Time, $\{local.time}
     config:
       import: optional:configserver:http://localhost:8888
       uri: http://localhost:8888
+      fail-fast: true
+      retry:
+        initial-interval: 1000
+        max-attempts: 6
+        max-interval: 2000
+        multiplier: 1.1
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10000
+        permitted-number-of-calls-in-half-open-state: 5
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2000
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
